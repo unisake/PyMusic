@@ -9,8 +9,9 @@
 python -m venv venv
 venv\Scripts\activate
 ```
-`(venv) PS C:\...`
+`(venv) PS C:\...`になるはず
 ```sh
+#(venv) PS C:\...で
 pip install numpy scipy
 pip list
 ```
@@ -43,13 +44,13 @@ wave = import("example.wav")
 wave_y[a,b] = wave_x
 #加算合成
 wave_y[a,b] += wave_x
-#移送反転
+#位相反転
 -wave_x
 #減算合成
 wave_y[a,b] -= wave_x
-#増幅
+#増幅(音量を上げる)
 wave_x * val
-#音量を下げる
+#減衰(音量を下げる)
 wave_x -= wave_x * val
 ```
 
