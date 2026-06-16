@@ -1,5 +1,7 @@
+#/PyMusic/core.py
 import numpy as np
 from scipy.io import wavfile
+from .data import SAMPLING_RATE
 
 class Wave:#作曲エンジンの中核となる波形クラス
     def __init__(self, data):#波形データを受け取る
@@ -12,7 +14,7 @@ class Wave:#作曲エンジンの中核となる波形クラス
             return other.data#メンバ変数(np.array)を返す
         return other#それ以外だったらそのまま返す
 
-#波形データを加工するための演算子オーバーロード達
+#波形データを加工するための演算子オーバーライド達
 
     #wave[a,b]として使いたい
     def __getitem__(self, key):#配列っぽく操作したい
@@ -84,3 +86,5 @@ class Wave:#作曲エンジンの中核となる波形クラス
 
     def out(self, filename):#波形データを出力
         wavfile.write(filename, SAMPLING_RATE, self.data)
+
+__all__ = ["Wave"]
