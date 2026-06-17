@@ -50,8 +50,8 @@ class Wave:#作曲エンジンの中核となる波形クラス
             self.data / self._get_data(other)
         )
 
-    #スカラー倍の逆演算子も定義しておくと便利
-    #(val * wave1としても使えるようになる)
+    #スカラー倍の逆演算子も定義しておくと幸せになれる
+    #(val * waveとしても使えるようになる)
     def __rmul__(self, other):#スカラー倍の逆演算子
         return self * other
     
@@ -62,14 +62,17 @@ class Wave:#作曲エンジンの中核となる波形クラス
 
 ##再代入演算
 
+    #wave_Y += wave_X
     def __iadd__(self, other):#波形データを加算して再代入する
             self.data += self._get_data(other)
             return self
 
+    #wave_Y -= wave_X
     def __isub__(self, other):#波形データを減算して再代入する
         self.data -= self._get_data(other)
         return self
 
+    #wave_Y *= wave_X
     def __imul__(self, other):#波形データをスカラー倍して再代入する
         self.data *= self._get_data(other)
         return self
@@ -84,7 +87,8 @@ class Wave:#作曲エンジンの中核となる波形クラス
     def __repr__(self):
         return f"Wave(size={len(self.data)})"   
 
+    #wave.out(filename)で出力したい
     def out(self, filename):#波形データを出力
         wavfile.write(filename, SAMPLING_RATE, self.data)
 
-__all__ = ["Wave"]
+__all__ = ["Wave"]#inpoert * でWaveクラスだけ見せる
