@@ -5,25 +5,36 @@ from .data import SAMPLING_RATE
 
 class Wave:#作曲エンジンの中核となる波形クラス
     def __init__(self, data):#波形データを受け取る
-        #波形データはnumpyの配列で管理。
-        self.data = np.asarray(data, dtype=np.float32)
+        #波形データはnumpyの配列(float32)で管理。
+        self.data = np.array(data, dtype=np.float32, copy=True)
 
-    #型チェック
+    #Wave型チェック
     def _get_data(self, other):
         if isinstance(other, Wave):#型が同じだったら
             return other.data#メンバ変数(np.array)を返す
         return other#それ以外だったらそのまま返す
+    
+    def _check_key(self, key):#配列成分をintに変換
+        if isinstance(key, slice):
+            return slice(
+                int(key.start) if key.start is not None else None,
+                int(key.stop) if key.stop is not None else None,
+                key.step
+            )
+        return key
 
 #波形データを加工するための演算子オーバーライド達
 
     #wave[a,b]として使いたい
     def __getitem__(self, key):#配列っぽく操作したい
+        key = self._check_key(key)
         return Wave(self.data[key])
 
 ##四則演算
 
-    #wave[a:b] = valueとして使いたい
+    #waveY[a:b] = waveXとして使いたい
     def __setitem__(self, key, value):
+        key = self._check_key(key)
         self.data[key] = self._get_data(value)
     
     #wave_A + wave_Bとして使いたい
@@ -87,8 +98,17 @@ class Wave:#作曲エンジンの中核となる波形クラス
     def __repr__(self):
         return f"Wave(size={len(self.data)})"   
 
-    #wave.out(filename)で出力したい
-    def out(self, filename):#波形データを出力
-        wavfile.write(filename, SAMPLING_RATE, self.data)
+    def out(self, filename):
+        data = self.data
 
-__all__ = ["Wave"]#inpoert * でWaveクラスだけ見せる
+        # (1) 正規化（必須）
+        max_val = np.max(np.abs(data))
+        if max_val > 1.0:
+            data = data / max_val
+
+        # (2) float32に統一
+        data = data.astype(np.float32)
+
+        wavfile.write(filename, SAMPLING_RATE, data)
+
+__all__ = ["Wave"]#inport * でWaveクラスだけ見せる

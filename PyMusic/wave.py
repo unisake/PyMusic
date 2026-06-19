@@ -67,4 +67,28 @@ def noise(size):#ホワイトノイズを生成して取得
 def null(size):#無音を生成して取得(重要)
     return Wave(np.zeros(size))
 
-__all__ = ["import_wave","sine","square","triangle","sawtooth","noise","null"]
+def envelope(size, attack=0.1, decay=0.1, sustain=0.7, release=0.1):
+    t = np.linspace(0, 1, size)
+
+    a = int(size * attack)
+    d = int(size * decay)
+    r = int(size * release)
+    s = size - (a + d + r)
+
+    env = np.zeros(size)
+
+    # attack
+    env[:a] = np.linspace(0, 1, a)**2
+
+    # decay
+    env[a:a+d] = np.linspace(1, sustain, d)
+
+    # sustain
+    env[a+d:a+d+s] = sustain
+
+    # release
+    env[a+d+s:] = np.linspace(sustain, 0, r)**2
+
+    return Wave(env)
+
+__all__ = ["import_wave","sine","square","triangle","sawtooth","noise","null","envelope"]

@@ -49,10 +49,10 @@ Cmajor[5,1,+1]  # G#5
 `./PyMusic/get_wave.py`
 ### 基本波形を生成
 ```py
-wave = triangle_wave(Cmajor[1]) #三角波
-wave = square_wave(Cmajor[2]) #矩形波
-wave = sine_wave(Cmajor[5,1]) #サイン波
-wave = null_wave() #空データ(重要)
+wave = triangle_wave(size,Cmajor[1]) #三角波
+wave = square_wave(size,Cmajor[2]) #矩形波
+wave = sine_wave(size,Cmajor[5,1]) #サイン波
+wave = null_wave(size) #空データ(重要)
 ```
 組み込み変数みたいにソフト側で用意されてる波形
 
